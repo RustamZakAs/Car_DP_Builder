@@ -9,31 +9,45 @@ namespace Car_DP_Builder
     //которая будет симулировать процесс сборки автомобилей, 
     //другими словами будет создавать объект класса транспортного средства и 
     //наделять его свойствами, которые характерны конкретному автомобилю.
-    class Program
+    partial class Program
     {
+        static List<Builder> lb = new List<Builder>();
         static void Main(string[] args)
         {
+            lb.Add(new ConcreteBuilder_Daewoo_Lanos());
+            lb.Add(new ConcreteBuilder_Ford_Probe());
+            lb.Add(new ConcreteBuilder_UAZ_Patriot());
+            //********** add
+            lb.Add(new ConcreteBuilder_Hyundai_Getz());
+            //********** add
+            List<Product> lp = new List<Product>();
+            Builder builder;
+            for (int i = 0; i < 5; i++)
+            {
 
-            Builder builder = new ConcreteBuilder_Daewoo_Lanos();
-            Director director = new Director(builder);
-            director.Construct();
-            Product product = builder.GetResult();
+                builder = new ConcreteBuilder_Daewoo_Lanos();
 
-            product.Show();
+                Director director = new Director(builder);
+                director.Construct();
+                Product product = builder.GetResult();
 
-/*            
-            // содаем объект пекаря
-            Baker baker = new Baker();
-            // создаем билдер для ржаного хлеба
-            BreadBuilder builder = new RyeBreadBuilder();
-            // выпекаем
-            Bread ryeBread = baker.Bake(builder);
-            Console.WriteLine(ryeBread.ToString());
-            // оздаем билдер для пшеничного хлеба
-            builder = new WheatBreadBuilder();
-            Bread wheatBread = baker.Bake(builder);
-            Console.WriteLine(wheatBread.ToString());
-*/
+                product.Show();
+            }
+
+
+            /*            
+                        // содаем объект пекаря
+                        Baker baker = new Baker();
+                        // создаем билдер для ржаного хлеба
+                        BreadBuilder builder = new RyeBreadBuilder();
+                        // выпекаем
+                        Bread ryeBread = baker.Bake(builder);
+                        Console.WriteLine(ryeBread.ToString());
+                        // оздаем билдер для пшеничного хлеба
+                        builder = new WheatBreadBuilder();
+                        Bread wheatBread = baker.Bake(builder);
+                        Console.WriteLine(wheatBread.ToString());
+            */
             Console.Read();
         }
     }
@@ -151,6 +165,35 @@ namespace Car_DP_Builder
         public override void BuildPartGearBox()
         {
             product.Add("4 Manual");
+        }
+        public override Product GetResult()
+        {
+            return product;
+        }
+    }
+
+
+
+ 
+    class ConcreteBuilder_Hyundai_Getz : Builder
+    {
+        Product product = new Product();
+        //NameMechanism = "UAZ Patriot";
+        public override void BuildPartBody()
+        {
+            product.Add("Хетчбэк");
+        }
+        public override void BuildPartEngine()
+        {
+            product.Add("66");
+        }
+        public override void BuildPartWheels()
+        {
+            product.Add("13");
+        }
+        public override void BuildPartGearBox()
+        {
+            product.Add("4 Auto");
         }
         public override Product GetResult()
         {
