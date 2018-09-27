@@ -12,6 +12,7 @@ namespace Car_DP_Builder
     partial class Program
     {
         static List<Builder> lb = new List<Builder>();
+        static Random r = new Random();
         static void Main(string[] args)
         {
             lb.Add(new ConcreteBuilder_Daewoo_Lanos());
@@ -24,29 +25,49 @@ namespace Car_DP_Builder
             Builder builder;
             for (int i = 0; i < 5; i++)
             {
-
-                builder = new ConcreteBuilder_Daewoo_Lanos();
+                //builder = new ConcreteBuilder_Daewoo_Lanos();
+                switch (r.Next(0, lb.Count - 1))
+                {
+                    case 0:
+                        builder = new ConcreteBuilder_Daewoo_Lanos();
+                        break;
+                    case 1:
+                        builder = new ConcreteBuilder_Ford_Probe();
+                        break;
+                    case 2:
+                        builder = new ConcreteBuilder_UAZ_Patriot();
+                        break;
+                    //********** add
+                    case 3:
+                        builder = new ConcreteBuilder_Hyundai_Getz();
+                        break;
+                    //********** add
+                    default:
+                        builder = null;
+                        break;
+                }
+                //---Builder builder = (Builder)lb[r.Next(0,lb.Count-1)].Clone();
 
                 Director director = new Director(builder);
                 director.Construct();
                 Product product = builder.GetResult();
 
-                product.Show();
+                Console.WriteLine(product.ToString());
             }
 
 
             /*            
-                        // содаем объект пекаря
-                        Baker baker = new Baker();
-                        // создаем билдер для ржаного хлеба
-                        BreadBuilder builder = new RyeBreadBuilder();
-                        // выпекаем
-                        Bread ryeBread = baker.Bake(builder);
-                        Console.WriteLine(ryeBread.ToString());
-                        // оздаем билдер для пшеничного хлеба
-                        builder = new WheatBreadBuilder();
-                        Bread wheatBread = baker.Bake(builder);
-                        Console.WriteLine(wheatBread.ToString());
+                // содаем объект пекаря
+                Baker baker = new Baker();
+                // создаем билдер для ржаного хлеба
+                BreadBuilder builder = new RyeBreadBuilder();
+                // выпекаем
+                Bread ryeBread = baker.Bake(builder);
+                Console.WriteLine(ryeBread.ToString());
+                // оздаем билдер для пшеничного хлеба
+                builder = new WheatBreadBuilder();
+                Bread wheatBread = baker.Bake(builder);
+                Console.WriteLine(wheatBread.ToString());
             */
             Console.Read();
         }
@@ -68,7 +89,7 @@ namespace Car_DP_Builder
         }
     }
 
-    abstract class Builder
+    abstract class Builder : ICloneable
     {
         //public string NameMechanism { get; set; } //Имя механизма
         public abstract void BuildPartBody(); //Корпус
@@ -76,6 +97,11 @@ namespace Car_DP_Builder
         public abstract void BuildPartWheels(); //Колеса (R)
         public abstract void BuildPartGearBox(); //Коробка переключения передач К. П. П.
         public abstract Product GetResult();
+
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 
     public class Product
@@ -91,6 +117,15 @@ namespace Car_DP_Builder
             {
                 Console.WriteLine(item.ToString());
             }
+        }
+        public override string ToString()
+        {
+            string temp = " ";
+            foreach (var item in parts)
+            {
+                temp += item.ToString() + " ";
+            }
+            return temp;
         }
     }
 
@@ -174,7 +209,7 @@ namespace Car_DP_Builder
 
 
 
- 
+    //********** add
     class ConcreteBuilder_Hyundai_Getz : Builder
     {
         Product product = new Product();
@@ -200,4 +235,5 @@ namespace Car_DP_Builder
             return product;
         }
     }
+    //********** add
 }
